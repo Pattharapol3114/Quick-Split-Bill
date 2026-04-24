@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "173180867261",
+    "project_id": "quick-split-bill-ee7f5",
+    "storage_bucket": "quick-split-bill-ee7f5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173180867261:android:89d8990a7136f271e75dd4",
+        "android_client_info": {
+          "package_name": "com.example.quick_split_bill"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvmJOWgo3rVuzVrh64uMAVD_hOP4yPSwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

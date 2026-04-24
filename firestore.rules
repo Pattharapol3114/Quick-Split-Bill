@@ -1,0 +1,80 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isGroupMember(groupId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid));
+    }
+
+    function isGroupOwner(groupId) {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/groups/$(groupId)).data.createdBy == request.auth.uid;
+    }
+
+    function isValidAmount(value) {
+      return value is number && value >= 0 && value <= 100000000;
+    }
+
+    // Groups
+    match /groups/{groupId} {
+      allow create: if isSignedIn() &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() > 0;
+
+      allow read: if isGroupMember(groupId);
+
+      // Group metadata update/delete by owner only.
+      allow update, delete: if isGroupOwner(groupId);
+    }
+
+    // Group members (document id = Firebase Auth uid)
+    match /groups/{groupId}/members/{memberUid} {
+      allow read: if isGroupMember(groupId);
+
+      // Owner can manage all memberships; user can read their own membership doc.
+      allow create, update, delete: if isGroupOwner(groupId);
+    }
+
+    // Bills in each group
+    match /groups/{groupId}/bills/{billId} {
+      allow read: if isGroupMember(groupId);
+
+      allow create: if isGroupMember(groupId) &&
+        request.resource.data.description is string &&
+        request.resource.data.description.size() > 0 &&
+        isValidAmount(request.resource.data.totalAmount) &&
+        request.resource.data.payerId is string &&
+        request.resource.data.involvedMemberIds is list &&
+        request.resource.data.involvedMemberIds.size() > 0;
+
+      allow update, delete: if isGroupMember(groupId);
+    }
+
+    // Trip history per user
+    match /trips/{tripId} {
+      allow create: if isSignedIn() &&
+        request.resource.data.userId == request.auth.uid;
+
+      allow read: if isSignedIn() &&
+        resource.data.userId == request.auth.uid;
+
+      allow update: if isSignedIn() &&
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.userId == resource.data.userId;
+
+      allow delete: if isSignedIn() &&
+        resource.data.userId == request.auth.uid;
+    }
+
+    // Deny everything else by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
