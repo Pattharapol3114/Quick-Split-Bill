@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:quick_split_bill/screens/auth_landing_screen.dart';
 import 'package:quick_split_bill/screens/group_management_screen.dart';
+import 'package:quick_split_bill/screens/landing_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,7 +110,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const AppRoot(),
+      home: LandingScreen(nextScreenBuilder: (context) => const AppRoot()),
       debugShowCheckedModeBanner: false,
     );
   }

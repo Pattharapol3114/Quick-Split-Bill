@@ -70,6 +70,32 @@ class _MultiBillLedgerScreenState extends State<MultiBillLedgerScreen> {
     }
   }
 
+  void _removeBillAt(int index) {
+    final removedBill = _bills[index];
+    setState(() {
+      _bills.removeAt(index);
+    });
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('Removed "${removedBill.description}"'),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                _bills.insert(index, removedBill);
+              });
+            },
+          ),
+        ),
+      );
+  }
+
   String _buildTripSignature(List<Transaction> transactions) {
     final payload = {
       'members': widget.members
@@ -427,13 +453,29 @@ class _MultiBillLedgerScreenState extends State<MultiBillLedgerScreen> {
                                 fontSize: 13,
                               ),
                             ),
-                            trailing: Text(
-                              formattedAmount,
-                              style: const TextStyle(
-                                color: Colors.black87,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  formattedAmount,
+                                  style: const TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                IconButton(
+                                  tooltip: 'Delete bill',
+                                  icon: Icon(
+                                    Icons.delete_outline,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.secondary,
+                                  ),
+                                  onPressed: () => _removeBillAt(index),
+                                ),
+                              ],
                             ),
                           );
                         },
