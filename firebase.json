@@ -1,42 +1,50 @@
 {
-	"flutter": {
-		"platforms": {
-			"android": {
-				"default": {
-					"projectId": "quick-split-bill-ee7f5",
-					"appId": "1:173180867261:android:89d8990a7136f271e75dd4",
-					"fileOutput": "android/app/google-services.json"
-				}
-			},
-			"dart": {
-				"lib/firebase_options.dart": {
-					"projectId": "quick-split-bill-ee7f5",
-					"configurations": {
-						"android": "1:173180867261:android:89d8990a7136f271e75dd4",
-						"ios": "1:173180867261:ios:b8f808639786140fe75dd4",
-						"macos": "1:173180867261:ios:b8f808639786140fe75dd4",
-						"web": "1:173180867261:web:b6201a9193340217e75dd4",
-						"windows": "1:173180867261:web:3a00a1847ebf8047e75dd4"
-					}
-				}
-			}
-		}
-	},
-	"firestore": {
-		"rules": "firestore.rules"
-	},
-	"hosting": {
-		"public": "build/web",
-		"ignore": [
-			"firebase.json",
-			"**/.*",
-			"**/node_modules/**"
-		],
-		"rewrites": [
-			{
-				"source": "**",
-				"destination": "/index.html"
-			}
-		]
-	}
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "quick-split-bill-ee7f5",
+          "appId": "1:173180867261:android:89d8990a7136f271e75dd4",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "quick-split-bill-ee7f5",
+          "configurations": {
+            "android": "1:173180867261:android:89d8990a7136f271e75dd4",
+            "ios": "1:173180867261:ios:b8f808639786140fe75dd4",
+            "macos": "1:173180867261:ios:b8f808639786140fe75dd4",
+            "web": "1:173180867261:web:b6201a9193340217e75dd4",
+            "windows": "1:173180867261:web:3a00a1847ebf8047e75dd4"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/app/**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/app",
+        "destination": "/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/landing-page.html"
+      }
+    ]
+  }
 }
